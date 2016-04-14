@@ -213,5 +213,17 @@ namespace OpenZWaveDotNet
             selected = Helper.ToString(value);
             return result;
         }
+        public bool AddNode(uint homeId, bool doSecurity = true)
+        {
+            return NativeWrapper.AddNode(homeId, doSecurity);
+        }
+        public bool RemoveNode(uint homeId)
+        {
+            return NativeWrapper.RemoveNode(homeId);
+        }
+        public void ResetController(uint homeId)
+        {
+            NativeWrapper.ResetController(homeId);
+        }
     }
 }
