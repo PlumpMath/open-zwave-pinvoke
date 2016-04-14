@@ -1,0 +1,5 @@
+/dotnet/build/mono/bin/Debug
+/dotnet/build/mono/obj/Debug
+/cpp/build
+/dotnet/build/vs2015/obj/Debug
+/dotnet/build/vs2015/.vs/OpenZWaveDotNet/v14/*.suo
