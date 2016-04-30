@@ -11,7 +11,7 @@ namespace OpenZWaveDotNet
     {
         public static string[] MarshalUnmananagedStrArray2ManagedStrArray(IntPtr pUnmanagedStringArray, int stringCount)
         {
-            if(stringCount == 0)
+            if (stringCount == 0)
                 return new string[0];
 
             IntPtr[] pIntPtrArray = new IntPtr[stringCount];
@@ -22,18 +22,22 @@ namespace OpenZWaveDotNet
             for (int i = 0; i < stringCount; i++)
             {
                 managedStringArray[i] = Marshal.PtrToStringAnsi(pIntPtrArray[i]);
-                //TODO: How free memory pIntPtrArray[i]
+                NativeWrapper.Free(pIntPtrArray[i]);
             }
-
+            NativeWrapper.Free(pUnmanagedStringArray);
             return managedStringArray;
-
-            //TODO: How free memory pIntPtrArray
         }
 
         public static string ToString(IntPtr ptr)
         {
-            //TODO: how release memory
-            return Marshal.PtrToStringAnsi(ptr);
+            try
+            {
+                return Marshal.PtrToStringAnsi(ptr);
+            }
+            finally
+            {
+                NativeWrapper.Free(ptr);
+            }
         }
     }
 }

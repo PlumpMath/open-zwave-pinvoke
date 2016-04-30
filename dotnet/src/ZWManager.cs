@@ -9,34 +9,31 @@ namespace OpenZWaveDotNet
 
     public class ZWManager
     {
-		public ManagedNotificationsHandler OnNotification;
+		public Action<ZWNotification> NotificationCallback;
+        private OnNotificationCallback onOnNotificationCallback;
 
         public void Create()
         {
             NativeWrapper.CreateManager();
-            NativeWrapper.AddWatcher(OnNotificationCallback, IntPtr.Zero);
+            onOnNotificationCallback = new OnNotificationCallback(OnNotificationCallback);
+            NativeWrapper.AddWatcher(onOnNotificationCallback, IntPtr.Zero);
         }
 
         private void OnNotificationCallback(IntPtr notification, IntPtr context)
         {
-            try
+
+            if (NotificationCallback != null)
             {
-                if (OnNotification != null && notification != null)
+                try
                 {
-                    try
-                    {
-                        OnNotification(new ZWNotification(notification));
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Faild notify: " + ex.ToString());
-                    }
+                    NotificationCallback.Invoke(new ZWNotification(notification));
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Faild notify: " + ex.ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("OnNotificationCallback failed: " + ex.ToString());
-            }
+
         }
 
         public void AddDriver(string controllerPath)

@@ -130,7 +130,7 @@ OPENZWAVE_EXPORT bool GetValueAsString(OpenZWave::ValueID* id, const char** oval
 { 
 	string *str = new string();
 	bool result = OpenZWave::Manager::Get()->GetValueAsString(*id, str);
-	*ovalue = str->c_str();
+	*ovalue = toChar(*str);
 	delete str;
 	return result;
 }
@@ -139,7 +139,8 @@ OPENZWAVE_EXPORT bool GetValueListSelectionFromString(OpenZWave::ValueID* id, co
 { 
 	string *str = new string();
 	bool result = OpenZWave::Manager::Get()->GetValueListSelection(*id, str);
-	*ovalue = str->c_str();
+	*ovalue = toChar(*str);
+	delete str;
 	return result;
 }
 OPENZWAVE_EXPORT bool GetValueListSelectionFromInt(OpenZWave::ValueID* id, int32* ovalue) { return OpenZWave::Manager::Get()->GetValueListSelection(*id, ovalue); }
@@ -150,10 +151,10 @@ OPENZWAVE_EXPORT bool GetValueListItems(OpenZWave::ValueID* id, char*** result, 
 		return false;
 
 	*count = vec->size();
-	*result = new char*[*count];
+	*result = (char**) malloc(sizeof(char*) * (*count));
 	for (size_t i = 0; i < *count; i++) {
 		string str = (*vec)[i];
-		(*result)[i] = new char[str.size() + 1];
+		(*result)[i] = (char*) malloc(sizeof(char) * str.size() + 1);
 		strcpy((*result)[i], str.c_str());
 	}
 
@@ -276,3 +277,6 @@ OPENZWAVE_EXPORT uint8 GetValueIndex(OpenZWave::ValueID* value) { return value->
 OPENZWAVE_EXPORT uint32 GetValueType(OpenZWave::ValueID* value) { return value->GetType(); }
 OPENZWAVE_EXPORT uint64 GetValueId(OpenZWave::ValueID* value) { return value->GetId(); }
 OPENZWAVE_EXPORT void DeleteValue(OpenZWave::ValueID* value) { delete value; }
+
+/*Memory*/
+OPENZWAVE_EXPORT void Free(void* ptr) { free(ptr); }

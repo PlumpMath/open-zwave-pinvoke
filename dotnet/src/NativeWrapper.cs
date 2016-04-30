@@ -35,9 +35,9 @@ namespace OpenZWaveDotNet
         [DllImport(DLL, CallingConvention = CC)]
         public extern static bool AddDriver(string controllerPath);
         [DllImport(DLL, CallingConvention = CC)]
-        public extern static bool AddWatcher([MarshalAs(UnmanagedType.FunctionPtr)]OnNotificationCallback watcher, IntPtr context);
+        public extern static bool AddWatcher(OnNotificationCallback watcher, IntPtr context);
         [DllImport(DLL, CallingConvention = CC)]
-        public extern static bool RemoveWatcher([MarshalAs(UnmanagedType.FunctionPtr)]OnNotificationCallback watcher, IntPtr context);
+        public extern static bool RemoveWatcher(OnNotificationCallback watcher, IntPtr context);
         [DllImport(DLL, CallingConvention = CC)]
         public extern static void WriteConfig(uint homeId);
         [DllImport(DLL, CallingConvention = CC)]
@@ -418,5 +418,9 @@ namespace OpenZWaveDotNet
         public extern static ulong GetValueId(IntPtr value);
         [DllImport(DLL, CallingConvention = CC)]
         public extern static void DeleteValue(IntPtr value);
+
+        /*Memory*/
+        [DllImport(DLL, CallingConvention = CC)]
+        public extern static void Free(IntPtr value);
     }
 }
